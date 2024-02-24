@@ -20,6 +20,7 @@ client = OpenAI(
 def lambda_handler(request):
     if request.method == 'POST':
         instructions = request.POST.get('instructions', '')
+        files = request.POST.get('files', '')
         # Step 1: Create an Assistant
         def create_assistant(name="Crux's candidate hiring bot",instructions="You are Crux's CV shortlisting bot that lets crux find the most suitable candidates amongst a list of data given to you. Just send back the json output, nothing else", tools=[{"type": "code_interpreter"}], model ="gpt-3.5-turbo-1106", file_ids=[]):
             my_assistant = client.beta.assistants.create(
@@ -98,32 +99,30 @@ def lambda_handler(request):
                 sleep(5)
             return status
         response3 = None
-    #     files=["myapp/file1.pdf","myapp/file3.pdf"]
-    #     text = """
-    #     Resume Data   
-    # """
-    #     for file in files:
-    #         text+="""
+        text = """
+        Resume Data   
+    """
+        for file in files:
+            text+="""
 
-    #         Resume:
+            Resume:
 
-    #         """
-    #         pdf_file = open(file, 'rb')
-    #         # Create a PdfReader object
-    #         pdf_reader = PyPDF2.PdfReader(pdf_file)
+            """
+            pdf_file = open(file, 'rb')
+            # Create a PdfReader object
+            pdf_reader = PyPDF2.PdfReader(pdf_file)
 
-    #         # Get the number of pages in the PDF file
-    #         num_pages = len(pdf_reader.pages)
+            # Get the number of pages in the PDF file
+            num_pages = len(pdf_reader.pages)
 
-    #         # Extract text from each page
-    #         for page_num in range(num_pages):
-    #             page = pdf_reader.pages[page_num]
-    #             text += page.extract_text()
-    #         # Close the PDF file
-    #         pdf_file.close()
-            # Print the extracted text
-        # print(text)
-        # print(instructions+text)
+            # Extract text from each page
+            for page_num in range(num_pages):
+                page = pdf_reader.pages[page_num]
+                text += page.extract_text()
+            # Close the PDF file
+            pdf_file.close()
+        print(text)
+        insstructions=instructions+text
         assistant=create_assistant()
         thread=create_thread()
         add_message_to_thread(thread.id,instructions)
@@ -211,3 +210,21 @@ def lambda_handler(request):
 # }'''
 # )
 # )
+    
+import os
+
+@csrf_exempt
+def upload_file(request):
+    if request.method == 'POST' and request.FILES:
+        try:
+            # Loop through each file in the request
+            for file_name, file_obj in request.FILES.items():
+                # Save the file in the same directory
+                with open(file_name, 'wb') as destination:
+                    for chunk in file_obj.chunks():
+                        destination.write(chunk)
+            return JsonResponse({"message": "Files uploaded successfully"})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    else:
+        return JsonResponse({"error": "No files were uploaded or invalid request method"}, status=400)
