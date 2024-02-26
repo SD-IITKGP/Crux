@@ -32,3 +32,4 @@ This Django application serves as an endpoint to process PDF files and text inst
 
 ### Contributors
 - [Sourabh Choudhary](https://github.com/SD-IITKGP)
+- [Mahim Jain](https://girhub.com/jainmahim)
