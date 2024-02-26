@@ -9,7 +9,7 @@ This Django application serves as an endpoint to process PDF files and text inst
 ### Setup
 1. **Environment Setup**: Ensure you have Python installed on your system. Install required packages using `pip install -r requirements.txt`.
    
-2. **Environment Variables**: Create a `.env` file in the project root directory and provide your OpenAI API key.
+2. **Environment Variables**: Create a `.env` file in the myapp directory and provide your OpenAI API key.
     ```
     API=your_openai_api_key_here
     ```
