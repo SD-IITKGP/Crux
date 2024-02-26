@@ -3,6 +3,9 @@
 ### Introduction
 This Django application serves as an endpoint to process PDF files and text instructions using OpenAI's GPT-3.5 model. It extracts text from uploaded PDF files and combines it with user-provided instructions to generate responses from the AI model.
 
+### [Frontend Link](https://github.com/SD-IITKGP/Crux/tree/frontend?tab=readme-ov-file)
+
+
 ### Setup
 1. **Environment Setup**: Ensure you have Python installed on your system. Install required packages using `pip install -r requirements.txt`.
    
